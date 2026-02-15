@@ -1,0 +1,1088 @@
+{
+  "report_metadata": {
+    "project_name": "Fidelius",
+    "analysis_date": "2026-02-15",
+    "framework": "Spring Boot 2.5.15 (Spring MVC)",
+    "security_framework": "Spring Security with LDAP",
+    "java_version": "11"
+  },
+  "project_profile": {
+    "framework_type": "Spring MVC",
+    "framework_version": "2.5.15",
+    "java_version": "11",
+    "architectural_pattern": "Standard layered (Controller → Service → Repository)",
+    "key_dependencies": [
+      "Spring Boot Starter Web",
+      "Spring Boot Starter Security",
+      "Spring Security LDAP 4.0.3.RELEASE",
+      "AWS SDK v2 2.16.60",
+      "Springfox Swagger 2.7.0",
+      "BouncyCastle 1.70",
+      "Jasypt 1.9.2",
+      "Guava"
+    ],
+    "main_packages": {
+      "controllers": ["FideliusController", "AuthController"],
+      "services": ["CredentialsService", "FideliusService", "FideliusRoleService", "MembershipService"],
+      "models": ["Credential", "Metadata", "HistoryEntry", "Account"],
+      "config": ["FideliusWebSecurityConfig", "AppConfig"],
+      "authfilter": ["UserHeaderFilter"]
+    },
+    "generic_base_classes": false
+  },
+  "authorization_model": {
+    "mechanisms": [
+      {
+        "type": "FILTER_CHAIN",
+        "confidence": "HIGH",
+        "description": "Global SecurityFilterChain with .anyRequest().permitAll() - NO AUTHENTICATION REQUIRED",
+        "security_level": "CRITICAL_ISSUE"
+      },
+      {
+        "type": "ANNOTATION_BASED",
+        "confidence": "HIGH",
+        "description": "Method-level @PreAuthorize on service methods (12 occurrences)",
+        "security_level": "ADEQUATE"
+      },
+      {
+        "type": "CUSTOM_FILTER",
+        "confidence": "MEDIUM",
+        "description": "UserHeaderFilter extracts user from headers but doesn't enforce presence",
+        "security_level": "WEAK"
+      },
+      {
+        "type": "PROGRAMMATIC",
+        "confidence": "MEDIUM",
+        "description": "FideliusRoleService with custom authorization logic",
+        "security_level": "ADEQUATE"
+      }
+    ],
+    "roles": [
+      {
+        "name": "MASTER",
+        "description": "Admin access across all accounts. Can delete in all accounts including prod",
+        "hierarchy_level": 1
+      },
+      {
+        "name": "OPS",
+        "description": "Admin access across all accounts. Cannot delete in prod accounts",
+        "hierarchy_level": 2
+      },
+      {
+        "name": "DEV",
+        "description": "Limited access based on membership. Only non-prod accounts",
+        "hierarchy_level": 3
+      },
+      {
+        "name": "UNAUTHORIZED",
+        "description": "No memberships. No access",
+        "hierarchy_level": 4
+      }
+    ],
+    "permissions": [
+      "LIST_CREDENTIALS",
+      "READ_SECRET",
+      "WRITE_SECRET",
+      "DELETE_SECRET",
+      "ROTATE_SECRET",
+      "READ_METADATA",
+      "WRITE_METADATA",
+      "DELETE_METADATA"
+    ]
+  },
+  "endpoints": [
+    {
+      "path": "/api/fidelius/heartbeat",
+      "method": "GET",
+      "controller": "FideliusController",
+      "handler_method": "heartbeatEndpoint",
+      "line_number": 58,
+      "auth": {
+        "required": false,
+        "mechanism": "NONE",
+        "expression": null,
+        "roles": [],
+        "effective_roles": ["anonymous"],
+        "confidence": "HIGH"
+      },
+      "access_intent": {
+        "cedar_action": "N/A",
+        "resource_type": "HealthCheck",
+        "attributes": {
+          "write": [],
+          "read": [],
+          "read_filter": []
+        },
+        "attribute_source": "None - empty response",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": [],
+      "flags": ["NO_AUTH", "EXPECTED_PUBLIC"]
+    },
+    {
+      "path": "/api/fidelius/credentials",
+      "method": "GET",
+      "controller": "FideliusController",
+      "handler_method": "getCredentials",
+      "line_number": 63,
+      "auth": {
+        "required": true,
+        "mechanism": "SERVICE_LAYER",
+        "expression": "@fideliusRoleService.isAuthorized(#application, #account, \"LIST_CREDENTIALS\")",
+        "roles": ["MASTER", "OPS", "DEV"],
+        "effective_roles": ["MASTER", "OPS", "DEV"],
+        "confidence": "HIGH"
+      },
+      "access_intent": {
+        "cedar_action": "ListResource",
+        "resource_type": "Credential",
+        "attributes": {
+          "write": [],
+          "read": [
+            "shortKey",
+            "longKey",
+            "account",
+            "region",
+            "application",
+            "environment",
+            "component",
+            "lastUpdatedBy",
+            "lastUpdatedDate"
+          ],
+          "read_filter": ["account", "region", "application"]
+        },
+        "attribute_source": "Credential model excluding secret field",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": [
+        "DynamoDB scanDynamoDB",
+        "AccountsService.getAccountByAlias (for sdlc check)"
+      ],
+      "flags": []
+    },
+    {
+      "path": "/api/fidelius/credentials/{key}/",
+      "method": "GET",
+      "controller": "FideliusController",
+      "handler_method": "getCredential",
+      "line_number": 77,
+      "auth": {
+        "required": true,
+        "mechanism": "SERVICE_LAYER",
+        "expression": "@fideliusRoleService.isAuthorized(#application, #account, \"LIST_CREDENTIALS\")",
+        "roles": ["MASTER", "OPS", "DEV"],
+        "effective_roles": ["MASTER", "OPS", "DEV"],
+        "confidence": "HIGH"
+      },
+      "access_intent": {
+        "cedar_action": "ReadResource",
+        "resource_type": "Credential",
+        "attributes": {
+          "write": [],
+          "read": [
+            "shortKey",
+            "longKey",
+            "account",
+            "region",
+            "application",
+            "environment",
+            "component",
+            "lastUpdatedBy",
+            "lastUpdatedDate"
+          ],
+          "read_filter": ["key", "account", "region", "application"]
+        },
+        "attribute_source": "Credential model excluding secret field",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": ["DynamoDB queryDynamoDB"],
+      "flags": []
+    },
+    {
+      "path": "/api/fidelius/credentials/history",
+      "method": "GET",
+      "controller": "FideliusController",
+      "handler_method": "getCredentialHistory",
+      "line_number": 91,
+      "auth": {
+        "required": true,
+        "mechanism": "SERVICE_LAYER",
+        "expression": "@fideliusRoleService.isAuthorized(#application, #account, \"LIST_CREDENTIALS\")",
+        "roles": ["MASTER", "OPS", "DEV"],
+        "effective_roles": ["MASTER", "OPS", "DEV"],
+        "confidence": "HIGH"
+      },
+      "access_intent": {
+        "cedar_action": "ReadResource",
+        "resource_type": "CredentialHistory",
+        "attributes": {
+          "write": [],
+          "read": ["revision", "updatedBy", "updatedDate"],
+          "read_filter": ["account", "region", "application", "environment", "component", "shortKey"]
+        },
+        "attribute_source": "HistoryEntry model",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": ["DynamoDB queryDynamoDB"],
+      "flags": []
+    },
+    {
+      "path": "/api/fidelius/credentials/secret",
+      "method": "GET",
+      "controller": "FideliusController",
+      "handler_method": "getSecret",
+      "line_number": 108,
+      "auth": {
+        "required": true,
+        "mechanism": "SERVICE_LAYER",
+        "expression": "@fideliusRoleService.isAuthorized(#application, #account)",
+        "roles": ["MASTER", "OPS", "DEV"],
+        "effective_roles": {
+          "MASTER": "all_accounts",
+          "OPS": "all_accounts",
+          "DEV": "non_prod_only_with_membership"
+        },
+        "confidence": "HIGH"
+      },
+      "access_intent": {
+        "cedar_action": "ReadResource",
+        "resource_type": "CredentialSecret",
+        "attributes": {
+          "write": [],
+          "read": [
+            "shortKey",
+            "account",
+            "region",
+            "application",
+            "environment",
+            "component",
+            "secret"
+          ],
+          "read_filter": ["account", "region", "application", "environment", "component", "shortKey", "version"]
+        },
+        "attribute_source": "Credential model with secret field",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": [
+        "FideliusService.getCredential",
+        "DynamoDB query",
+        "KMS decrypt"
+      ],
+      "flags": ["SENSITIVE_DATA"]
+    },
+    {
+      "path": "/api/fidelius/credentials/secret",
+      "method": "POST",
+      "controller": "FideliusController",
+      "handler_method": "createCredential",
+      "line_number": 125,
+      "auth": {
+        "required": true,
+        "mechanism": "SERVICE_LAYER",
+        "expression": "@fideliusRoleService.isAuthorized(#credential.application, #credential.account)",
+        "roles": ["MASTER", "OPS", "DEV"],
+        "effective_roles": {
+          "MASTER": "all_accounts",
+          "OPS": "all_accounts",
+          "DEV": "non_prod_only_with_membership"
+        },
+        "confidence": "HIGH"
+      },
+      "access_intent": {
+        "cedar_action": "CreateResource",
+        "resource_type": "Credential",
+        "attributes": {
+          "write": [
+            "shortKey",
+            "account",
+            "region",
+            "application",
+            "environment",
+            "component",
+            "secret",
+            "source",
+            "sourceType",
+            "isActiveDirectory"
+          ],
+          "read": [],
+          "read_filter": []
+        },
+        "attribute_source": "Credential model with @Valid validation",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": [
+        "Check credential history (getCredentialHistory)",
+        "FideliusService.putCredential",
+        "DynamoDB write",
+        "KMS encrypt"
+      ],
+      "flags": ["SENSITIVE_DATA"]
+    },
+    {
+      "path": "/api/fidelius/credentials/secret",
+      "method": "PUT",
+      "controller": "FideliusController",
+      "handler_method": "updateCredential",
+      "line_number": 141,
+      "auth": {
+        "required": true,
+        "mechanism": "SERVICE_LAYER",
+        "expression": "@fideliusRoleService.isAuthorized(#credential.application, #credential.account)",
+        "roles": ["MASTER", "OPS", "DEV"],
+        "effective_roles": {
+          "MASTER": "all_accounts",
+          "OPS": "all_accounts",
+          "DEV": "non_prod_only_with_membership"
+        },
+        "confidence": "HIGH"
+      },
+      "access_intent": {
+        "cedar_action": "UpdateResource",
+        "resource_type": "Credential",
+        "attributes": {
+          "write": [
+            "shortKey",
+            "account",
+            "region",
+            "application",
+            "environment",
+            "component",
+            "secret",
+            "source",
+            "sourceType",
+            "isActiveDirectory",
+            "lastUpdatedBy"
+          ],
+          "read": [],
+          "read_filter": []
+        },
+        "attribute_source": "Credential model with @Valid validation",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": [
+        "FideliusService.putCredential",
+        "DynamoDB write",
+        "KMS encrypt"
+      ],
+      "flags": ["SENSITIVE_DATA", "AUDIT_FIELD_MANIPULATION_RISK"]
+    },
+    {
+      "path": "/api/fidelius/credentials/secret",
+      "method": "DELETE",
+      "controller": "FideliusController",
+      "handler_method": "deleteCredential",
+      "line_number": 152,
+      "auth": {
+        "required": true,
+        "mechanism": "SERVICE_LAYER",
+        "expression": "@fideliusRoleService.isAuthorizedToDelete(#credential.getApplication(), #credential.getAccount())",
+        "roles": ["MASTER", "OPS", "DEV"],
+        "effective_roles": {
+          "MASTER": "all_accounts_including_prod",
+          "OPS": "non_prod_only",
+          "DEV": "non_prod_only_with_membership"
+        },
+        "confidence": "HIGH"
+      },
+      "access_intent": {
+        "cedar_action": "DeleteResource",
+        "resource_type": "Credential",
+        "attributes": {
+          "write": [],
+          "read": [],
+          "read_filter": ["account", "region", "application", "environment", "component", "shortKey", "source", "sourceType"]
+        },
+        "attribute_source": "Query parameters",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": [
+        "getMetadata (to check if metadata exists)",
+        "FideliusService.deleteCredential or deleteCredentialWithMetadata",
+        "DynamoDB delete"
+      ],
+      "flags": ["DESTRUCTIVE_OPERATION"]
+    },
+    {
+      "path": "/api/fidelius/credentials/rotate",
+      "method": "POST",
+      "controller": "FideliusController",
+      "handler_method": "rotateSecret",
+      "line_number": 172,
+      "auth": {
+        "required": true,
+        "mechanism": "SERVICE_LAYER",
+        "expression": "@fideliusRoleService.isAuthorized(#application, #account)",
+        "roles": ["MASTER", "OPS", "DEV"],
+        "effective_roles": {
+          "MASTER": "all_accounts",
+          "OPS": "all_accounts",
+          "DEV": "non_prod_only_with_membership"
+        },
+        "confidence": "MEDIUM"
+      },
+      "access_intent": {
+        "cedar_action": "UpdateResource",
+        "resource_type": "Credential",
+        "attributes": {
+          "write": [
+            "account",
+            "sourceType",
+            "source",
+            "shortKey",
+            "component",
+            "region",
+            "application",
+            "environment"
+          ],
+          "read": [],
+          "read_filter": []
+        },
+        "attribute_source": "Inferred from Map<String,String> request body usage in code",
+        "attribute_confidence": "MEDIUM"
+      },
+      "downstream_calls": [
+        "External REST API call to rotation service",
+        "OAuth2 token acquisition",
+        "AccountsService.getAccountByAlias"
+      ],
+      "flags": ["DYNAMIC_SCHEMA", "EXTERNAL_CALL"]
+    },
+    {
+      "path": "/api/fidelius/sources",
+      "method": "GET",
+      "controller": "FideliusController",
+      "handler_method": "getSourceNames",
+      "line_number": 188,
+      "auth": {
+        "required": false,
+        "mechanism": "NONE",
+        "expression": null,
+        "roles": [],
+        "effective_roles": ["anonymous"],
+        "confidence": "HIGH"
+      },
+      "access_intent": {
+        "cedar_action": "N/A",
+        "resource_type": "SourceNames",
+        "attributes": {
+          "write": [],
+          "read": ["source_names_list"],
+          "read_filter": ["account", "region", "sourceType", "application"]
+        },
+        "attribute_source": "AWS service API (RDS, Aurora, DocumentDB, Redshift)",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": [
+        "RDS DescribeDBInstances",
+        "RDS DescribeDBClusters",
+        "Redshift DescribeClusters"
+      ],
+      "flags": ["NO_AUTH", "INFORMATION_DISCLOSURE"]
+    },
+    {
+      "path": "/api/fidelius/sourceTypes",
+      "method": "GET",
+      "controller": "FideliusController",
+      "handler_method": "getSourceNames",
+      "line_number": 201,
+      "auth": {
+        "required": false,
+        "mechanism": "NONE",
+        "expression": null,
+        "roles": [],
+        "effective_roles": ["anonymous"],
+        "confidence": "HIGH"
+      },
+      "access_intent": {
+        "cedar_action": "N/A",
+        "resource_type": "SourceTypes",
+        "attributes": {
+          "write": [],
+          "read": ["source_types_list"],
+          "read_filter": []
+        },
+        "attribute_source": "Configuration property fidelius.sourceTypes",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": [],
+      "flags": ["NO_AUTH", "INFORMATION_DISCLOSURE"]
+    },
+    {
+      "path": "/api/fidelius/rotationUserManual",
+      "method": "GET",
+      "controller": "FideliusController",
+      "handler_method": "getRotationUserManual",
+      "line_number": 207,
+      "auth": {
+        "required": false,
+        "mechanism": "NONE",
+        "expression": null,
+        "roles": [],
+        "effective_roles": ["anonymous"],
+        "confidence": "HIGH"
+      },
+      "access_intent": {
+        "cedar_action": "N/A",
+        "resource_type": "Documentation",
+        "attributes": {
+          "write": [],
+          "read": ["user_manual_text"],
+          "read_filter": []
+        },
+        "attribute_source": "Configuration property fidelius.rotationUserManual",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": [],
+      "flags": ["NO_AUTH", "INFORMATION_DISCLOSURE"]
+    },
+    {
+      "path": "/api/fidelius/credentials/metadata",
+      "method": "GET",
+      "controller": "FideliusController",
+      "handler_method": "getMetadata",
+      "line_number": 213,
+      "auth": {
+        "required": true,
+        "mechanism": "SERVICE_LAYER",
+        "expression": "@fideliusRoleService.isAuthorized(#application, #account)",
+        "roles": ["MASTER", "OPS", "DEV"],
+        "effective_roles": {
+          "MASTER": "all_accounts",
+          "OPS": "all_accounts",
+          "DEV": "non_prod_only_with_membership"
+        },
+        "confidence": "HIGH"
+      },
+      "access_intent": {
+        "cedar_action": "ReadResource",
+        "resource_type": "Metadata",
+        "attributes": {
+          "write": [],
+          "read": [
+            "shortKey",
+            "account",
+            "region",
+            "application",
+            "environment",
+            "component",
+            "sourceType",
+            "source"
+          ],
+          "read_filter": ["account", "region", "application", "environment", "component", "shortKey"]
+        },
+        "attribute_source": "Metadata model",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": ["FideliusService.getMetadata", "DynamoDB query"],
+      "flags": []
+    },
+    {
+      "path": "/api/fidelius/credentials/metadata",
+      "method": "POST",
+      "controller": "FideliusController",
+      "handler_method": "createMetadata",
+      "line_number": 226,
+      "auth": {
+        "required": true,
+        "mechanism": "SERVICE_LAYER",
+        "expression": "@fideliusRoleService.isAuthorized(#application, #account)",
+        "roles": ["MASTER", "OPS", "DEV"],
+        "effective_roles": {
+          "MASTER": "all_accounts",
+          "OPS": "all_accounts",
+          "DEV": "non_prod_only_with_membership"
+        },
+        "confidence": "HIGH"
+      },
+      "access_intent": {
+        "cedar_action": "CreateResource",
+        "resource_type": "Metadata",
+        "attributes": {
+          "write": [
+            "shortKey",
+            "account",
+            "region",
+            "application",
+            "environment",
+            "component",
+            "sourceType",
+            "source"
+          ],
+          "read": [],
+          "read_filter": []
+        },
+        "attribute_source": "Metadata model with @Valid validation",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": ["FideliusService.createMetadata", "DynamoDB write"],
+      "flags": []
+    },
+    {
+      "path": "/api/fidelius/credentials/metadata",
+      "method": "PUT",
+      "controller": "FideliusController",
+      "handler_method": "updateMetadata",
+      "line_number": 243,
+      "auth": {
+        "required": true,
+        "mechanism": "SERVICE_LAYER",
+        "expression": "@fideliusRoleService.isAuthorized(#application, #account)",
+        "roles": ["MASTER", "OPS", "DEV"],
+        "effective_roles": {
+          "MASTER": "all_accounts",
+          "OPS": "all_accounts",
+          "DEV": "non_prod_only_with_membership"
+        },
+        "confidence": "HIGH"
+      },
+      "access_intent": {
+        "cedar_action": "UpdateResource",
+        "resource_type": "Metadata",
+        "attributes": {
+          "write": [
+            "shortKey",
+            "account",
+            "region",
+            "application",
+            "environment",
+            "component",
+            "sourceType",
+            "source"
+          ],
+          "read": [],
+          "read_filter": []
+        },
+        "attribute_source": "Metadata model with @Valid validation",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": ["FideliusService.putMetadata", "DynamoDB write"],
+      "flags": []
+    },
+    {
+      "path": "/api/fidelius/credentials/metadata",
+      "method": "DELETE",
+      "controller": "FideliusController",
+      "handler_method": "deleteMetadata",
+      "line_number": 254,
+      "auth": {
+        "required": true,
+        "mechanism": "SERVICE_LAYER",
+        "expression": "@fideliusRoleService.isAuthorizedToDelete(#metadata.getApplication(), #metadata.getAccount())",
+        "roles": ["MASTER", "OPS", "DEV"],
+        "effective_roles": {
+          "MASTER": "all_accounts_including_prod",
+          "OPS": "non_prod_only",
+          "DEV": "non_prod_only_with_membership"
+        },
+        "confidence": "HIGH"
+      },
+      "access_intent": {
+        "cedar_action": "DeleteResource",
+        "resource_type": "Metadata",
+        "attributes": {
+          "write": [],
+          "read": [],
+          "read_filter": ["account", "region", "application", "environment", "component", "shortKey"]
+        },
+        "attribute_source": "Query parameters",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": ["FideliusService.deleteMetadata", "DynamoDB delete"],
+      "flags": ["DESTRUCTIVE_OPERATION"]
+    },
+    {
+      "path": "/api/fidelius/validActiveDirectoryRegularExpression",
+      "method": "GET",
+      "controller": "FideliusController",
+      "handler_method": "activeDirectory",
+      "line_number": 272,
+      "auth": {
+        "required": false,
+        "mechanism": "NONE",
+        "expression": null,
+        "roles": [],
+        "effective_roles": ["anonymous"],
+        "confidence": "HIGH"
+      },
+      "access_intent": {
+        "cedar_action": "N/A",
+        "resource_type": "Configuration",
+        "attributes": {
+          "write": [],
+          "read": ["validActiveDirectoryRegularExpression", "validActiveDirectoryDescription"],
+          "read_filter": []
+        },
+        "attribute_source": "ActiveDirectory model",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": [],
+      "flags": ["NO_AUTH", "INFORMATION_DISCLOSURE"]
+    },
+    {
+      "path": "/api/fidelius/accounts",
+      "method": "GET",
+      "controller": "FideliusController",
+      "handler_method": "getAccounts",
+      "line_number": 278,
+      "auth": {
+        "required": false,
+        "mechanism": "NONE",
+        "expression": null,
+        "roles": [],
+        "effective_roles": ["anonymous"],
+        "confidence": "HIGH"
+      },
+      "access_intent": {
+        "cedar_action": "N/A",
+        "resource_type": "Account",
+        "attributes": {
+          "write": [],
+          "read": ["accountId", "name", "sdlc", "alias", "regions"],
+          "read_filter": []
+        },
+        "attribute_source": "Account model",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": ["AccountsService.getAccounts"],
+      "flags": ["NO_AUTH", "CRITICAL", "INFORMATION_DISCLOSURE"]
+    },
+    {
+      "path": "/api/fidelius/auth/role",
+      "method": "GET",
+      "controller": "AuthController",
+      "handler_method": "getRole",
+      "line_number": 40,
+      "auth": {
+        "required": false,
+        "mechanism": "NONE",
+        "expression": null,
+        "roles": [],
+        "effective_roles": ["anonymous", "authenticated"],
+        "confidence": "MEDIUM"
+      },
+      "access_intent": {
+        "cedar_action": "N/A",
+        "resource_type": "UserProfile",
+        "attributes": {
+          "write": [],
+          "read": ["userId", "name", "email", "role", "memberships", "accessInstructions"],
+          "read_filter": []
+        },
+        "attribute_source": "FideliusUserEntry and FideliusRoleService",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": [
+        "FideliusRoleService.getUserProfile",
+        "FideliusRoleService.getRole",
+        "FideliusRoleService.getMemberships (LDAP queries)"
+      ],
+      "flags": ["NO_AUTH", "INFORMATION_DISCLOSURE", "REQUIRES_USER_HEADER"]
+    },
+    {
+      "path": "/api/fidelius/info",
+      "method": "GET",
+      "controller": "Spring Boot Actuator",
+      "handler_method": "info",
+      "line_number": null,
+      "auth": {
+        "required": false,
+        "mechanism": "NONE",
+        "expression": null,
+        "roles": [],
+        "effective_roles": ["anonymous"],
+        "confidence": "HIGH"
+      },
+      "access_intent": {
+        "cedar_action": "N/A",
+        "resource_type": "ActuatorInfo",
+        "attributes": {
+          "write": [],
+          "read": ["application_info"],
+          "read_filter": []
+        },
+        "attribute_source": "Spring Boot Actuator",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": [],
+      "flags": ["NO_AUTH", "ACTUATOR", "EXPECTED_PUBLIC"]
+    },
+    {
+      "path": "/api/fidelius/health",
+      "method": "GET",
+      "controller": "Spring Boot Actuator",
+      "handler_method": "health",
+      "line_number": null,
+      "auth": {
+        "required": false,
+        "mechanism": "NONE",
+        "expression": null,
+        "roles": [],
+        "effective_roles": ["anonymous"],
+        "confidence": "HIGH"
+      },
+      "access_intent": {
+        "cedar_action": "N/A",
+        "resource_type": "ActuatorHealth",
+        "attributes": {
+          "write": [],
+          "read": ["health_status"],
+          "read_filter": []
+        },
+        "attribute_source": "Spring Boot Actuator",
+        "attribute_confidence": "HIGH"
+      },
+      "downstream_calls": [],
+      "flags": ["NO_AUTH", "ACTUATOR", "EXPECTED_PUBLIC"]
+    }
+  ],
+  "cedar_policies": [
+    {
+      "policy_id": "policy_001",
+      "type": "endpoint",
+      "cedar": "permit(principal in [Role::\"MASTER\", Role::\"OPS\", Role::\"DEV\"], action == Action::\"ListResource\", resource == ResourceType::\"Credential\") when { context.http_method == \"GET\" && context.path == \"/api/fidelius/credentials\" };",
+      "source_endpoint": "GET /api/fidelius/credentials",
+      "source_method": "CredentialsService.getAllCredentials:220",
+      "confidence": "HIGH",
+      "requires_review": false,
+      "review_reason": null
+    },
+    {
+      "policy_id": "policy_002",
+      "type": "attribute_read",
+      "cedar": "permit(principal in [Role::\"MASTER\", Role::\"OPS\", Role::\"DEV\"], action == Action::\"ReadAttribute\", resource == ResourceType::\"Credential\") when { resource.attribute in [\"shortKey\", \"longKey\", \"account\", \"region\", \"application\", \"environment\", \"component\", \"lastUpdatedBy\", \"lastUpdatedDate\"] };",
+      "source_endpoint": "GET /api/fidelius/credentials",
+      "source_method": "CredentialsService.getAllCredentials:220",
+      "confidence": "HIGH",
+      "requires_review": false,
+      "review_reason": null
+    },
+    {
+      "policy_id": "policy_003",
+      "type": "endpoint",
+      "cedar": "permit(principal in [Role::\"MASTER\", Role::\"OPS\"], action == Action::\"ReadResource\", resource == ResourceType::\"CredentialSecret\") when { context.http_method == \"GET\" && context.path == \"/api/fidelius/credentials/secret\" };",
+      "source_endpoint": "GET /api/fidelius/credentials/secret",
+      "source_method": "CredentialsService.getCredentialSecret:365",
+      "confidence": "HIGH",
+      "requires_review": false,
+      "review_reason": null
+    },
+    {
+      "policy_id": "policy_004",
+      "type": "endpoint",
+      "cedar": "permit(principal in [Role::\"DEV\"], action == Action::\"ReadResource\", resource == ResourceType::\"CredentialSecret\") when { context.http_method == \"GET\" && context.path == \"/api/fidelius/credentials/secret\" && resource.account_sdlc != \"prod\" && principal.memberships.contains(resource.application.toUpperCase()) };",
+      "source_endpoint": "GET /api/fidelius/credentials/secret",
+      "source_method": "CredentialsService.getCredentialSecret:365",
+      "confidence": "HIGH",
+      "requires_review": true,
+      "review_reason": "Complex authorization logic with prod/non-prod check and membership requirement"
+    },
+    {
+      "policy_id": "policy_005",
+      "type": "attribute_read",
+      "cedar": "permit(principal in [Role::\"MASTER\", Role::\"OPS\"], action == Action::\"ReadAttribute\", resource == ResourceType::\"CredentialSecret\") when { resource.attribute in [\"shortKey\", \"account\", \"region\", \"application\", \"environment\", \"component\", \"secret\"] };",
+      "source_endpoint": "GET /api/fidelius/credentials/secret",
+      "source_method": "CredentialsService.getCredentialSecret:365",
+      "confidence": "HIGH",
+      "requires_review": false,
+      "review_reason": null
+    },
+    {
+      "policy_id": "policy_006",
+      "type": "endpoint",
+      "cedar": "permit(principal in [Role::\"MASTER\", Role::\"OPS\"], action == Action::\"CreateResource\", resource == ResourceType::\"Credential\") when { context.http_method == \"POST\" && context.path == \"/api/fidelius/credentials/secret\" };",
+      "source_endpoint": "POST /api/fidelius/credentials/secret",
+      "source_method": "CredentialsService.createCredential:426",
+      "confidence": "HIGH",
+      "requires_review": false,
+      "review_reason": null
+    },
+    {
+      "policy_id": "policy_007",
+      "type": "attribute_write",
+      "cedar": "permit(principal in [Role::\"MASTER\", Role::\"OPS\"], action == Action::\"WriteAttribute\", resource == ResourceType::\"Credential\") when { resource.attribute in [\"shortKey\", \"account\", \"region\", \"application\", \"environment\", \"component\", \"secret\", \"source\", \"sourceType\", \"isActiveDirectory\"] };",
+      "source_endpoint": "POST /api/fidelius/credentials/secret",
+      "source_method": "CredentialsService.createCredential:426",
+      "confidence": "HIGH",
+      "requires_review": false,
+      "review_reason": null
+    },
+    {
+      "policy_id": "policy_008",
+      "type": "endpoint",
+      "cedar": "permit(principal == Role::\"MASTER\", action == Action::\"DeleteResource\", resource == ResourceType::\"Credential\") when { context.http_method == \"DELETE\" && context.path == \"/api/fidelius/credentials/secret\" };",
+      "source_endpoint": "DELETE /api/fidelius/credentials/secret",
+      "source_method": "CredentialsService.deleteCredential:527",
+      "confidence": "HIGH",
+      "requires_review": false,
+      "review_reason": null
+    },
+    {
+      "policy_id": "policy_009",
+      "type": "endpoint",
+      "cedar": "permit(principal == Role::\"OPS\", action == Action::\"DeleteResource\", resource == ResourceType::\"Credential\") when { context.http_method == \"DELETE\" && context.path == \"/api/fidelius/credentials/secret\" && resource.account_sdlc != \"prod\" };",
+      "source_endpoint": "DELETE /api/fidelius/credentials/secret",
+      "source_method": "CredentialsService.deleteCredential:527",
+      "confidence": "HIGH",
+      "requires_review": false,
+      "review_reason": null
+    },
+    {
+      "policy_id": "policy_010",
+      "type": "endpoint",
+      "cedar": "permit(principal in [Role::\"MASTER\", Role::\"OPS\"], action == Action::\"UpdateResource\", resource == ResourceType::\"Credential\") when { context.http_method == \"POST\" && context.path == \"/api/fidelius/credentials/rotate\" };",
+      "source_endpoint": "POST /api/fidelius/credentials/rotate",
+      "source_method": "CredentialsService.rotateCredential:453",
+      "confidence": "MEDIUM",
+      "requires_review": true,
+      "review_reason": "Request body is Map<String,String> - dynamic schema, cannot determine exact fields"
+    }
+  ],
+  "findings": [
+    {
+      "id": "C-1",
+      "severity": "CRITICAL",
+      "type": "NO_AUTH",
+      "endpoint": "ALL",
+      "location": "FideliusWebSecurityConfig.java:33-39",
+      "message": "Global Spring Security filter chain configured with .anyRequest().permitAll() - NO AUTHENTICATION REQUIRED at filter chain level",
+      "recommendation": "Change .permitAll() to .authenticated() for all endpoints except /heartbeat, /health, /info. Configure proper authentication provider."
+    },
+    {
+      "id": "C-2",
+      "severity": "CRITICAL",
+      "type": "NO_AUTH",
+      "endpoint": "GET /api/fidelius/accounts",
+      "location": "FideliusController.java:278-286",
+      "message": "Account information disclosure - endpoint returns ALL AWS account metadata including account IDs without authentication",
+      "recommendation": "Add @PreAuthorize to service method or require authentication at minimum"
+    },
+    {
+      "id": "H-1",
+      "severity": "HIGH",
+      "type": "NO_AUTH",
+      "endpoint": "ALL",
+      "location": "UserHeaderFilter.java:88-93",
+      "message": "UserHeaderFilter extracts user from headers but continues processing even if no user is found",
+      "recommendation": "Modify UserHeaderFilter to reject requests without valid user profile (except for public endpoints)"
+    },
+    {
+      "id": "H-2",
+      "severity": "HIGH",
+      "type": "SECURITY_MISCONFIGURATION",
+      "endpoint": "ALL",
+      "location": "FideliusWebSecurityConfig.java:38",
+      "message": "CSRF protection explicitly disabled",
+      "recommendation": "Enable CSRF protection for state-changing endpoints or document why header-based auth makes it unnecessary"
+    },
+    {
+      "id": "H-3",
+      "severity": "HIGH",
+      "type": "NO_AUTH",
+      "endpoint": "GET /api/fidelius/sources, /sourceTypes, /rotationUserManual, /validActiveDirectoryRegularExpression",
+      "location": "FideliusController.java:188-272",
+      "message": "Information disclosure via unprotected endpoints - exposes operational information without authentication",
+      "recommendation": "Require authentication for all operational endpoints"
+    },
+    {
+      "id": "H-4",
+      "severity": "HIGH",
+      "type": "INFORMATION_DISCLOSURE",
+      "endpoint": "GET /api/fidelius/auth/role",
+      "location": "AuthController.java:40-65",
+      "message": "Role endpoint leaks user information (ID, name, email, role, memberships) without proper authentication enforcement",
+      "recommendation": "Add authentication requirement and rate limiting"
+    },
+    {
+      "id": "M-1",
+      "severity": "MEDIUM",
+      "type": "UNBOUNDED_ACCESS",
+      "endpoint": "POST /api/fidelius/credentials/rotate",
+      "location": "FideliusController.java:173",
+      "message": "Dynamic request body schema - Map<String,String> instead of typed DTO",
+      "recommendation": "Create a RotateRequest DTO with proper validation annotations"
+    },
+    {
+      "id": "M-2",
+      "severity": "MEDIUM",
+      "type": "INCONSISTENT_AUTHORIZATION",
+      "endpoint": "GET /api/fidelius/credentials vs GET /api/fidelius/credentials/secret",
+      "location": "CredentialsService.java",
+      "message": "DEV role can LIST credentials in prod accounts but cannot READ secrets in prod - metadata leakage",
+      "recommendation": "Apply same authorization level to list and read operations, or filter list results based on read permissions"
+    },
+    {
+      "id": "M-3",
+      "severity": "MEDIUM",
+      "type": "AUTHORIZATION_BYPASS_POTENTIAL",
+      "endpoint": "PUT /api/fidelius/credentials/secret",
+      "location": "CredentialsService.java:395-398",
+      "message": "Service account detection allows client-controlled lastUpdatedBy field for audit trail manipulation",
+      "recommendation": "Do NOT allow lastUpdatedBy to be set by client requests - set audit fields server-side only"
+    },
+    {
+      "id": "M-4",
+      "severity": "MEDIUM",
+      "type": "MISSING_CONTROL",
+      "endpoint": "ALL",
+      "location": "N/A",
+      "message": "No rate limiting detected on any endpoints",
+      "recommendation": "Implement rate limiting per user/IP for secret reads, auth lookups, and credential creation"
+    },
+    {
+      "id": "L-1",
+      "severity": "LOW",
+      "type": "INFORMATION_DISCLOSURE",
+      "endpoint": "ALL",
+      "location": "Exception handling",
+      "message": "Verbose error messages - FideliusException includes HttpStatus and message returned to clients",
+      "recommendation": "Implement global exception handler to sanitize error responses"
+    },
+    {
+      "id": "L-2",
+      "severity": "LOW",
+      "type": "AUDIT_GAP",
+      "endpoint": "POST/PUT /api/fidelius/credentials/secret",
+      "location": "Credential model",
+      "message": "Audit fields (lastUpdatedBy, lastUpdatedDate) can be set by clients - no immutability enforcement",
+      "recommendation": "Remove audit fields from request DTOs, set server-side only, consider central audit log"
+    },
+    {
+      "id": "L-3",
+      "severity": "LOW",
+      "type": "INFO",
+      "endpoint": "N/A",
+      "location": "application.yml",
+      "message": "Session timeout configured (15 minutes) but may be irrelevant if using header-based authentication",
+      "recommendation": "Clarify authentication mechanism"
+    }
+  ],
+  "statistics": {
+    "total_endpoints": 21,
+    "auth_endpoints": 14,
+    "no_auth_endpoints": 7,
+    "policies_by_confidence": {
+      "HIGH": 14,
+      "MEDIUM": 2,
+      "LOW": 0,
+      "UNKNOWN": 0
+    },
+    "findings_by_severity": {
+      "CRITICAL": 2,
+      "HIGH": 4,
+      "MEDIUM": 4,
+      "LOW": 3,
+      "INFO": 0
+    },
+    "endpoints_by_http_method": {
+      "GET": 14,
+      "POST": 4,
+      "PUT": 2,
+      "DELETE": 2
+    },
+    "protected_vs_unprotected": {
+      "service_layer_protected": 14,
+      "controller_only": 0,
+      "unprotected": 7
+    }
+  }
+}
