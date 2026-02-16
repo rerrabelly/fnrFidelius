@@ -1,0 +1,51 @@
+CodeQL Query Results: GET Endpoints in Fidelius
+================================================
+
+Analysis Method: Source code pattern matching (buildless database)
+Note: Buildless databases don't extract annotations, so this query identifies 
+      methods by naming conventions (methods starting with "get" or ending in "Endpoint")
+
+GET Endpoints Found:
+-------------------
+
+1. AuthController:
+   - getRole() [line 41]
+
+2. FideliusController:
+   - getAccounts() [line 279]
+   - getMetadata() [line 214]
+   - getRotationUserManual() [line 208]
+   - getSourceNames() [line 202]
+   - getSourceNames() [line 189] (overloaded)
+   - getSecret() [line 109]
+   - getCredentialHistory() [line 92]
+   - getCredential() [line 78]
+   - getCredentials() [line 64]
+   - heartbeatEndpoint() [line 59]
+
+Total GET Endpoints: 11 (across 2 controllers)
+
+Verification Against Our Manual Analysis:
+-----------------------------------------
+From our Cedar policy analysis, we identified 14 GET endpoints:
+- /api/fidelius/heartbeat
+- /api/fidelius/credentials
+- /api/fidelius/credentials/{key}/
+- /api/fidelius/credentials/history
+- /api/fidelius/credentials/secret (GET)
+- /api/fidelius/sources
+- /api/fidelius/sourceTypes  
+- /api/fidelius/rotationUserManual
+- /api/fidelius/credentials/metadata (GET)
+- /api/fidelius/validActiveDirectoryRegularExpression
+- /api/fidelius/accounts
+- /api/fidelius/auth/role
+- /api/fidelius/info (actuator)
+- /api/fidelius/health (actuator)
+
+CodeQL found 11 of these by naming pattern. Missing:
+- activeDirectory() [doesn't start with "get"]
+- Actuator endpoints (not in our source)
+
+Limitation: Buildless CodeQL databases cannot extract annotation information.
+For full annotation-based analysis, a compiled database would be required.
