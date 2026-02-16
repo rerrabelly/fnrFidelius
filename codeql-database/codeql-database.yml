@@ -1,0 +1,13 @@
+---
+sourceLocationPrefix: /home/user/fnrFidelius/fidelius-service/src/main/java
+baselineLinesOfCode: 3958
+unicodeNewlines: false
+columnKind: utf16
+primaryLanguage: java
+creationMetadata:
+  cliVersion: 2.24.1
+  creationTime: 2026-02-16T22:26:31.817065564Z
+buildMode: none
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: true

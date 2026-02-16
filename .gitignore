@@ -38,3 +38,4 @@ fidelius-ui/package-lock.json
 fidelius-ui/src/mock-api/config.json
 fidelius-ui/proxy.conf.json
 fidelius-ui/src/mock-api/config.json
+codeql-tools/
