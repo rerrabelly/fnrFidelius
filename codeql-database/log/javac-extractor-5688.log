@@ -1,0 +1,129 @@
+[2026-02-18 01:53:06] [javac-extractor-5688] Starting extraction for:
+                                             sun.java.command=com.semmle.extractor.java.JavaExtractor --jdk-version 21 --javac-args @@@/home/user/fnrFidelius/codeql-database/log/ext/javac.args
+                                             user.dir=/home/user/fnrFidelius
+[2026-02-18 01:53:07] [javac-extractor-5688] Compilation name /home/user/fnrFidelius/codeql-database/trap/java/diagnostics/diagnostic.trap.gz
+[2026-02-18 01:53:11] [javac-extractor-5688] Annotation processor class 'lombok.launch.AnnotationProcessorHider$AnnotationProcessor' initialized.
+[2026-02-18 01:53:11] [javac-extractor-5688] Annotation processor class 'lombok.launch.AnnotationProcessorHider$ClaimingProcessor' initialized.
+[2026-02-18 01:53:11] [javac-extractor-5688] 42 files will be passed to the attrib/flow phase
+[2026-02-18 01:53:12] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/config/AppConfig.java
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing module java.base
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing module java.naming
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing module java.desktop
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing module java.datatransfer
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/software/amazon/awssdk/utils/2.16.60/utils-2.16.60.jar
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/com/google/guava/guava/31.0.1-jre/guava-31.0.1-jre.jar
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/springframework/boot/spring-boot/2.5.15/spring-boot-2.5.15.jar
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/springframework/ldap/spring-ldap-core/2.3.8.RELEASE/spring-ldap-core-2.3.8.RELEASE.jar
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/slf4j/slf4j-api/1.7.12/slf4j-api-1.7.12.jar
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/springframework/spring-beans/5.3.27/spring-beans-5.3.27.jar
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/2.5.15/spring-boot-autoconfigure-2.5.15.jar
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/springframework/spring-core/5.3.27/spring-core-5.3.27.jar
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/springframework/spring-web/5.3.27/spring-web-5.3.27.jar
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/software/amazon/awssdk/sdk-core/2.16.60/sdk-core-2.16.60.jar
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/io/springfox/springfox-core/2.7.0/springfox-core-2.7.0.jar
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/io/springfox/springfox-spi/2.7.0/springfox-spi-2.7.0.jar
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/io/springfox/springfox-spring-web/2.7.0/springfox-spring-web-2.7.0.jar
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/io/springfox/springfox-swagger2/2.7.0/springfox-swagger2-2.7.0.jar
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/9.0.75/tomcat-embed-core-9.0.75.jar
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/springframework/spring-context/5.3.27/spring-context-5.3.27.jar
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/software/amazon/awssdk/annotations/2.16.60/annotations-2.16.60.jar
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/springframework/spring-webmvc/5.3.27/spring-webmvc-5.3.27.jar
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/com/google/errorprone/error_prone_annotations/2.7.1/error_prone_annotations-2.7.1.jar
+[2026-02-18 01:53:27] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/software/amazon/awssdk/metrics-spi/2.16.60/metrics-spi-2.16.60.jar
+[2026-02-18 01:53:28] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/software/amazon/awssdk/profiles/2.16.60/profiles-2.16.60.jar
+[2026-02-18 01:53:28] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/reactivestreams/reactive-streams/1.0.4/reactive-streams-1.0.4.jar
+[2026-02-18 01:53:28] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/springframework/plugin/spring-plugin-metadata/1.2.0.RELEASE/spring-plugin-metadata-1.2.0.RELEASE.jar
+[2026-02-18 01:53:28] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/springframework/plugin/spring-plugin-core/1.2.0.RELEASE/spring-plugin-core-1.2.0.RELEASE.jar
+[2026-02-18 01:53:28] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/com/fasterxml/classmate/1.5.1/classmate-1.5.1.jar
+[2026-02-18 01:53:28] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar
+[2026-02-18 01:53:28] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/software/amazon/awssdk/http-client-spi/2.16.60/http-client-spi-2.16.60.jar
+[2026-02-18 01:53:28] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/io/springfox/springfox-swagger-common/2.7.0/springfox-swagger-common-2.7.0.jar
+[2026-02-18 01:53:28] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/springframework/spring-jcl/5.3.27/spring-jcl-5.3.27.jar
+[2026-02-18 01:53:28] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/io/springfox/springfox-schema/2.7.0/springfox-schema-2.7.0.jar
+[2026-02-18 01:53:28] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/mapstruct/mapstruct/1.1.0.Final/mapstruct-1.1.0.Final.jar
+[2026-02-18 01:53:28] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/io/swagger/swagger-models/1.5.13/swagger-models-1.5.13.jar
+[2026-02-18 01:53:28] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.12.7.1/jackson-databind-2.12.7.1.jar
+[2026-02-18 01:53:28] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.12.7/jackson-core-2.12.7.jar
+[2026-02-18 01:53:28] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.12.7/jackson-annotations-2.12.7.jar
+[2026-02-18 01:53:28] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/services/auth/FideliusAuthProperties.java
+[2026-02-18 01:53:28] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/authfilter/parser/IFideliusUserProfile.java
+[2026-02-18 01:53:28] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/services/auth/FideliusAuthorizationService.java
+[2026-02-18 01:53:29] [javac-extractor-5688] Processing module java.logging
+[2026-02-18 01:53:29] [javac-extractor-5688] Processing module java.compiler
+[2026-02-18 01:53:29] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.jar
+[2026-02-18 01:53:29] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar
+[2026-02-18 01:53:29] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/services/user/model/FideliusUserEntry.java
+[2026-02-18 01:53:29] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/controllers/FideliusController.java
+[2026-02-18 01:54:12] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/glassfish/hk2/external/jakarta.inject/2.6.1/jakarta.inject-2.6.1.jar
+[2026-02-18 01:54:12] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/jakarta/validation/jakarta.validation-api/2.0.2/jakarta.validation-api-2.0.2.jar
+[2026-02-18 01:54:12] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/software/amazon/awssdk/dynamodb/2.16.60/dynamodb-2.16.60.jar
+[2026-02-18 01:54:12] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/springframework/security/spring-security-core/5.5.8/spring-security-core-5.5.8.jar
+[2026-02-18 01:54:12] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/software/amazon/awssdk/redshift/2.16.60/redshift-2.16.60.jar
+[2026-02-18 01:54:12] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/software/amazon/awssdk/rds/2.16.60/rds-2.16.60.jar
+[2026-02-18 01:54:12] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/software/amazon/awssdk/regions/2.16.60/regions-2.16.60.jar
+[2026-02-18 01:54:12] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/software/amazon/awssdk/aws-core/2.16.60/aws-core-2.16.60.jar
+[2026-02-18 01:54:12] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/finra/fidelius/fidelius-sdk/3.0.2-SNAPSHOT/fidelius-sdk-3.0.2-SNAPSHOT.jar
+[2026-02-18 01:54:12] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/software/amazon/awssdk/kms/2.16.60/kms-2.16.60.jar
+[2026-02-18 01:54:12] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/software/amazon/awssdk/auth/2.16.60/auth-2.16.60.jar
+[2026-02-18 01:54:12] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/software/amazon/awssdk/sts/2.16.60/sts-2.16.60.jar
+[2026-02-18 01:54:12] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/software/amazon/awssdk/apache-client/2.16.60/apache-client-2.16.60.jar
+[2026-02-18 01:54:13] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/services/CredentialsService.java
+[2026-02-18 01:54:15] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/dmfs/http-client-essentials/0.20/http-client-essentials-0.20.jar
+[2026-02-18 01:54:15] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/dmfs/httpurlconnection-executor/0.20/httpurlconnection-executor-0.20.jar
+[2026-02-18 01:54:15] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/dmfs/oauth2-essentials/0.18/oauth2-essentials-0.18.jar
+[2026-02-18 01:54:15] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/dmfs/rfc3986-uri/0.8.1/rfc3986-uri-0.8.1.jar
+[2026-02-18 01:54:15] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/dmfs/jems/1.25/jems-1.25.jar
+[2026-02-18 01:54:15] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/dmfs/rfc5545-datetime/0.2.4/rfc5545-datetime-0.2.4.jar
+[2026-02-18 01:54:16] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar
+[2026-02-18 01:54:16] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/software/amazon/awssdk/dynamodb-enhanced/2.16.60/dynamodb-enhanced-2.16.60.jar
+[2026-02-18 01:54:16] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/dmfs/http-client-types/0.20/http-client-types-0.20.jar
+[2026-02-18 01:54:16] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/services/account/AccountsService.java
+[2026-02-18 01:54:16] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/model/Credential.java
+[2026-02-18 01:54:16] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/hibernate/validator/hibernate-validator/6.2.5.Final/hibernate-validator-6.2.5.Final.jar
+[2026-02-18 01:54:16] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/glassfish/hk2/hk2-api/2.6.1/hk2-api-2.6.1.jar
+[2026-02-18 01:54:16] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/model/validators/IsValidActiveDirectoryPassword.java
+[2026-02-18 01:54:16] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/model/Metadata.java
+[2026-02-18 01:54:16] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/services/rest/RESTService.java
+[2026-02-18 01:54:16] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/model/account/Account.java
+[2026-02-18 01:54:16] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/model/account/Region.java
+[2026-02-18 01:54:16] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/services/FideliusService.java
+[2026-02-18 01:54:16] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/services/auth/FideliusRoleService.java
+[2026-02-18 01:54:16] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/services/aws/AWSSessionService.java
+[2026-02-18 01:54:17] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/services/aws/DynamoDBService.java
+[2026-02-18 01:54:17] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/services/MigrateService.java
+[2026-02-18 01:54:17] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/exceptions/FideliusException.java
+[2026-02-18 01:54:17] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/model/HistoryEntry.java
+[2026-02-18 01:54:17] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/factories/AWSSessionFactory.java
+[2026-02-18 01:54:17] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/model/aws/AWSEnvironment.java
+[2026-02-18 01:54:17] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/services/MembershipService.java
+[2026-02-18 01:54:18] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/services/auth/FideliusRole.java
+[2026-02-18 01:54:18] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/authfilter/parser/UserParser.java
+[2026-02-18 01:54:18] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/model/membership/Membership.java
+[2026-02-18 01:54:18] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/model/rotate/RotateRequest.java
+[2026-02-18 01:54:18] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/authfilter/parser/SSOParser.java
+[2026-02-18 01:54:18] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/model/CredentialSchema.java
+[2026-02-18 01:54:18] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/authfilter/UserHeaderFilter.java
+[2026-02-18 01:54:18] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/authfilter/parser/CompositeParser.java
+[2026-02-18 01:54:18] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/model/ActiveDirectory.java
+[2026-02-18 01:54:18] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/authfilter/parser/FideliusUserProfile.java
+[2026-02-18 01:54:18] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/services/auth/FideliusActiveDirectoryLDAPAuthorizationService.java
+[2026-02-18 01:54:18] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/services/auth/FideliusOpenLDAPAuthorizationService.java
+[2026-02-18 01:54:18] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/services/user/model/UserSupplier.java
+[2026-02-18 01:54:18] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/config/FideliusWebSecurityConfig.java
+[2026-02-18 01:54:23] [javac-extractor-5688] Processing module java.sql
+[2026-02-18 01:54:23] [javac-extractor-5688] Processing module java.xml
+[2026-02-18 01:54:23] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/springframework/security/spring-security-config/5.5.8/spring-security-config-5.5.8.jar
+[2026-02-18 01:54:23] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/springframework/security/spring-security-web/5.5.8/spring-security-web-5.5.8.jar
+[2026-02-18 01:54:23] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/springframework/spring-aop/5.3.27/spring-aop-5.3.27.jar
+[2026-02-18 01:54:23] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/springframework/spring-expression/5.3.27/spring-expression-5.3.27.jar
+[2026-02-18 01:54:23] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/springframework/security/spring-security-ldap/4.0.3.RELEASE/spring-security-ldap-4.0.3.RELEASE.jar
+[2026-02-18 01:54:23] [javac-extractor-5688] Processing JAR file: /root/.m2/repository/org/springframework/security/spring-security-crypto/5.5.8/spring-security-crypto-5.5.8.jar
+[2026-02-18 01:54:23] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/model/db/DBCredential.java
+[2026-02-18 01:54:23] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/controllers/AuthController.java
+[2026-02-18 01:54:23] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/FideliusApp.java
+[2026-02-18 01:54:23] [javac-extractor-5688] Processing file /home/user/fnrFidelius/fidelius-service/src/main/java/org/finra/fidelius/model/validators/IsValidActiveDirectoryPasswordValidator.java
+[2026-02-18 01:54:23] [javac-extractor-5688] Javac init time: 4.5s
+[2026-02-18 01:54:23] [javac-extractor-5688] Javac attr time: 0.5s
+[2026-02-18 01:54:23] [javac-extractor-5688] Extractor time: 71.3s
+[2026-02-18 01:54:23] [javac-extractor-5688] Other time: 0.6s
+[2026-02-18 01:54:23] [javac-extractor-5688] Total time: 76.9s

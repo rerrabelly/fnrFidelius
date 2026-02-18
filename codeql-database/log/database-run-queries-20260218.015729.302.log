@@ -1,0 +1,11 @@
+[2026-02-18 01:57:29] This is codeql database run-queries --threads=2 /home/user/fnrFidelius/codeql-database /home/user/fnrFidelius/codeql-tools/codeql-repo/java/ql/src/Metrics/Files/FLinesOfCode.ql
+[2026-02-18 01:57:29] Log file was started late.
+[2026-02-18 01:57:29] Calling plumbing command: codeql resolve ram --dataset=/home/user/fnrFidelius/codeql-database/db-java --format=json
+[2026-02-18 01:57:29] [PROGRESS] resolve ram> Stringpool size measured as 5800362
+[2026-02-18 01:57:29] Plumbing command codeql resolve ram completed:
+                      [
+                        "-J-Xmx2260M",
+                        "--off-heap-ram=2326"
+                      ]
+[2026-02-18 01:57:29] Chaining via /tmp/codeql.K36qy3tP to plumbing: execute queries -J-Xmx2260M --off-heap-ram=2326 --verbosity=progress --logdir=/home/user/fnrFidelius/codeql-database/log --evaluator-log-level=5 --threads=2 --warnings=show --qlconfig-file=/home/user/fnrFidelius/qlconfig.yml --dynamic-join-order-mode=none --output=/home/user/fnrFidelius/codeql-database/results -- /home/user/fnrFidelius/codeql-database/db-java /home/user/fnrFidelius/codeql-tools/codeql-repo/java/ql/src/Metrics/Files/FLinesOfCode.ql
+[2026-02-18 01:57:29] Exiting with code 70
